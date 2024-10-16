@@ -1,6 +1,32 @@
 -- Plugins curated from kickstart vim.
-
 return {
+    -- Markdown preview.
+    {
+        'gnikdroy/mdpreview.nvim',
+        ft = "markdown",
+        run = function() require("mdpreview").install_mlp() end,
+        config = function()
+            require("mdpreview").setup({
+                port = 8080,
+                localhost_only = true,
+                follow = true,
+                browser = true,
+            })
+        end
+    },
+    { -- Adds git related signs to the gutter, as well as utilities for managing changes
+        'lewis6991/gitsigns.nvim',
+        opts = {
+            signs = {
+                add = { text = '+' },
+                change = { text = '~' },
+                delete = { text = '_' },
+                topdelete = { text = '‾' },
+                changedelete = { text = '~' },
+            },
+        },
+    },
+
     -- "gc" to comment visual regions/lines
     { 'numToStr/Comment.nvim',    opts = {} },
     -- Highlight todo, notes, etc in comments
@@ -141,7 +167,14 @@ return {
             --  - settings (table): Override the default settings passed when initializing the server.
             --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
             local servers = {
-                -- clangd = {},
+                clangd = {
+
+                    cmd = { "clangd", "--enable-config", "--compile-commands-dir=build", "--header-insertion=never" },
+                    filetypes = { "c", "cpp", "objc", "objcpp" },
+                    root_dir = require 'lspconfig'.util.root_pattern('compile_commands.json', '.git'),
+                    capabilities = capabilities,
+
+                },
                 -- gopls = {},
                 -- pyright = {},
                 -- rust_analyzer = {},
@@ -315,7 +348,7 @@ return {
                     -- Accept ([y]es) the completion.
                     --  This will auto-import if your LSP supports it.
                     --  This will expand snippets if the LSP sent a snippet.
-                    ['<CR>'] = cmp.mapping.confirm { select = true },
+                    ['<C-y>'] = cmp.mapping.confirm { select = true },
 
                     -- Manually trigger a completion from nvim-cmp.
                     --  Generally you don't need this, because nvim-cmp will display

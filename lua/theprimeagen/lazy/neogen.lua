@@ -10,15 +10,23 @@ return {
         neogen.setup({
             snippet_engine = "luasnip"
         })
-
         vim.keymap.set("n", "<leader>nf", function()
             neogen.generate({ type = "func" })
-        end)
+        end,
+            {desc='[n]ew [f]unction snippet'}
+        )
 
         vim.keymap.set("n", "<leader>nt", function()
             neogen.generate({ type = "type" })
-        end)
+        end,
+            {desc='[n]ew [t]ype snippet'}
+        )
 
+        vim.keymap.set("n", "<leader>nc", function()
+            neogen.generate({ type = "class" })
+        end,
+            {desc='[n]ew [c]lass snippet'}
+        )
     end,
     -- Uncomment next line if you want to follow only stable versions
     -- version = "*"
